@@ -159,8 +159,11 @@ function generateDisplay() {
     		'</div>' +
         '<div class="panel-body">' +
         	'<h4>' + questionUp.question + '</h4>' +
-        	'<iframe width="640" height="360" src="' + questionUp.video +
-        	'" frameborder="0" allowfullscreen></iframe>' +
+        	'<div class="embed-responsive embed-responsive-16by9">' +
+	        	'<iframe class="embed-responsive-item" ' +
+	        	'width="640" height="360" src="' + questionUp.video +
+	        	'" frameborder="0" allowfullscreen></iframe>' +
+	        '</div>' +
         '</div>' +
         '<div class="panel-footer"></div>'
     );
