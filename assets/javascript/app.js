@@ -192,12 +192,6 @@ function questionAnswerReport() {
 	);
 }
 
-function yourAnswer(textOfClickedBtn) {
-	$('#display').append(
-		'</p><p>Your answer was: ' + textOfClickedBtn + '</p>'
-	);
-}
-
 function generateReviewPanel(textOfClickedBtn) {
 	if (textOfClickedBtn === questionUp.correctAnswer) {
 		$('#display').html('<h3 class="text-success">Correct!</h3>');
