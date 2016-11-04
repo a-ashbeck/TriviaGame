@@ -98,7 +98,7 @@ function selectQuestion() {
 // Function to generate all base HTML
 function generateBaseHTML() {
 	setBodyHTML();
-	setContainerHTML():
+	setContainerHTML();
 	setRowHTML();
 
 	$('#display').hide();
