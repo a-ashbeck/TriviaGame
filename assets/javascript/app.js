@@ -1,3 +1,4 @@
+//  Objects for game questions
 var questionOne = {
 	question: 'What... is your name?',
 	answers: ['Bob', 'Sir Lancelot of Camelot', 'Sir Galahad', 'John Cleese'],
@@ -24,16 +25,25 @@ var questionThree = {
 	video: 'https://www.youtube.com/embed/cV0tCphFMr8?start=87&end=90'
 };
 
+// Empty object fro current question
 var questionUp = {};
+// Array of the question objects
 var questions = [questionOne, questionTwo, questionThree];
+// Iterator for questions array
 var questionSelector = 0;
+// Counter for correct responses
 var correctResponses = 0;
+//  Counter for wrong and no responses
 var wrongAnswers = 0;
+// Countdown timer for question session
 var countdownClock = 40;
+// Countdown clock for review page after each question
 var reviewClock = 4;
+// Question and review sections counters for setInterval functions
 var reviewCounter;
 var questionCounter;
 
+// Interval functions for question sequence and review sequence
 function questionTimer() {
     questionCounter = setInterval(decrementCountdown, 1000);
 }
@@ -42,8 +52,10 @@ function reviewTimer() {
 	reviewCounter = setInterval(decrementReview, 1000);
 }
 
+// Decrement functions for question and review pages
 function decrementCountdown(){
     countdownClock--;
+    // updates timer display in DOM
     $('#countdown-clock').html('<h4>Time left: ' + countdownClock + '</h4>');
 
     if (countdownClock === 0){
@@ -57,7 +69,7 @@ function decrementReview(){
     
     if (reviewClock === 0){
         reviewStop();
-        if (questionSelector === 3) {
+        if (questionSelector === questions.length) {
         	endGame();
         } else {
         	refreshQuestion();
@@ -65,6 +77,7 @@ function decrementReview(){
     }
 }
 
+//  Functions to stop the intervals for question and review pages
 function questionStop() {
     clearInterval(questionCounter);
 }
@@ -73,15 +86,26 @@ function reviewStop() {
     clearInterval(reviewCounter);
 }
 
+// Function for setting the questionUp object to the next question object
 function selectQuestion() {
 	questionUp = questions[questionSelector];
+	// Increases the question selection iterator
 	questionSelector++;
 }
 
-
-
 // jQuery functions
-function generateBaseHtml() {
+
+// Function to generate all base HTML
+function generateBaseHTML() {
+	setBodyHTML();
+	setContainerHTML():
+	setRowHTML();
+
+	$('#display').hide();
+}
+
+// Dynamically generates Jumbotron and Container
+function setBodyHTML() {
 	$('body').html(
 		'<div class="jumbotron">' +
 			'<h1 class="text-center">' +
@@ -95,11 +119,17 @@ function generateBaseHtml() {
 		'</div>' +
 		'<div class="container"></div>'
 	);
+}
 
+// Generates bootstrap row
+function setContainerHTML() {
 	$('.container').html(
 		'<div class="row"></div>'
 	);
+}
 
+//  Sets the HTML of the row
+function setRowHTML() {
 	$('.row').html(
 		'<div id="status-panel" class="col-md-3 col-sm-12 col-xs-12">' +
 			'<div class="panel panel-info">' +
@@ -137,10 +167,9 @@ function generateBaseHtml() {
 			'</div>' +
 		'</div>'
 	);
-
-	$('#display').hide();
 }
 
+// Function to display game stats and countdown clock
 function displayStats() {
 	$('#countdown-clock').html('<h4>Time left: ' + countdownClock + '</h4>');
 	$('#correct-answers').html(
@@ -149,6 +178,7 @@ function displayStats() {
 	$('#wrong-answers').html('<h4>Wrong Answers: ' + wrongAnswers + '</h4>');
 }
 
+// Loads questions to the display in DOM
 function generateDisplay() {
 	$('#start-panel').hide();
 	$('#display').show();
@@ -170,7 +200,9 @@ function generateDisplay() {
     loadResponseOptions();
 }
 
+// Loads trivia question and response to the DOM
 function loadResponseOptions() {
+	// utilization of for loop to append response options to DOM
 	for (var i = 0; i < questionUp.answers.length; i++) {
 		$('.panel-footer').append(
 			'<p>' +
@@ -183,6 +215,7 @@ function loadResponseOptions() {
 	}
 }
 
+// Reports the current question and the correct answer
 function questionAnswerReport() {
 	$('#display').append(
 		'<p>Question: <strong>' + questionUp.question +
@@ -192,6 +225,7 @@ function questionAnswerReport() {
 	);
 }
 
+// This dynamically generates the content of the review page
 function generateReviewPanel(textOfClickedBtn) {
 	if (textOfClickedBtn === questionUp.correctAnswer) {
 		$('#display').html('<h3 class="text-success">Correct!</h3>');
@@ -207,8 +241,10 @@ function generateReviewPanel(textOfClickedBtn) {
 	questionAnswerReport();
 }
 
+// Handles clicks on an answer choice
 function ifAnswerClicked() {
 	$('body').on('click', '.answer-option', function() {
+		// Utilization of 'this'
 		var btnTextHolder = $(this).html();
 		questionStop();
 	    generateReviewPanel(btnTextHolder);
@@ -216,6 +252,7 @@ function ifAnswerClicked() {
 	});
 }
 
+// Handles the events of a clock timeout
 function ifTimeRunsOut() {
 	if (countdownClock === 0) {
 		generateReviewPanel();
@@ -223,6 +260,7 @@ function ifTimeRunsOut() {
 	}
 }
 
+// This resets the board and loads the next question
 function freshBoard() {
 	questionUp = {};
 	questionSelector = 0;
@@ -231,6 +269,7 @@ function freshBoard() {
 	refreshQuestion();
 }
 
+// This resets the game for the new question
 function refreshQuestion() {
 	countdownClock = 40;
 	reviewClock = 4;
@@ -240,18 +279,21 @@ function refreshQuestion() {
 	questionTimer();
 }
 
+// This sets the board upon clicking the start button
 function setBoard() {
 	$('#start').on('click', function() {
 		freshBoard();
 	});
 }
 
+// This function sets for all the functions of the game
 function startGame() {
-	generateBaseHtml();
+	generateBaseHTML();
 	setBoard();
 	ifAnswerClicked();
 }
 
+// Handles the end-game display and reset option
 function endGame() {
 	displayStats();
 	$('#display').html(
@@ -264,13 +306,14 @@ function endGame() {
 	restartGame();	
 }
 
+// Handles the restart of the game on clicking the restart button
 function restartGame() {
 	$('#restart').on('click', function() {
 		freshBoard();
 	});
 }
 
-
+// jQuery document.ready function
 $(document).ready(function() {
 	startGame();
 });
